@@ -29,8 +29,14 @@ pols_month_df =
       "09" ~ "september",
       "10" ~ "october",
       "11" ~ "november",
-      "12" ~ "december")
-  )
-  
+      "12" ~ "december"),
+    prez_gop = case_match(
+      prez_gop,
+      0 ~ "dem",
+      1 ~ "gop"
+    ),
+    president = prez_gop) |> 
+  select(-day,-prez_gop,-prez_dem)
+
 ```
 
