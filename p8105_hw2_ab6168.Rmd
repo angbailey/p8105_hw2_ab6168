@@ -14,7 +14,23 @@ library(tidyverse)
 pols_month_df = 
   read_csv("data/pols-month.csv") |> 
   separate(mon,
-    into = c("year", "month","day"), sep = "-")
+    into = c("year", "month","day"), sep = "-") |> 
+  mutate(
+    month = case_match(
+      month,
+      "01" ~ "january",
+      "02" ~ "february",
+      "03" ~ "march",
+      "04" ~ "april",
+      "05" ~ "may",
+      "06" ~ "june",
+      "07" ~ "july",
+      "08" ~ "august",
+      "09" ~ "september",
+      "10" ~ "october",
+      "11" ~ "november",
+      "12" ~ "december")
+  )
   
 ```
 
