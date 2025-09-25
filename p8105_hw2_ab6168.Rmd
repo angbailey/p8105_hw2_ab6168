@@ -115,6 +115,7 @@ mr_trash_df =
   select(-...15,-...16) |> 
   janitor::clean_names() |> 
   mutate(sports_balls = as.integer(round(sports_balls)),
+         year = as.integer(year),
          wheel_name = "mr_trash")
   
 prof_trash_df = 
@@ -129,6 +130,13 @@ gwyn_trash_df =
 
 ```
 
+
+Binding datasets
+```{r}
+trash_wheel_df =
+  bind_rows(mr_trash_df, prof_trash_df, gwyn_trash_df) |> 
+  relocate(wheel_name)
+```
 
 
 
