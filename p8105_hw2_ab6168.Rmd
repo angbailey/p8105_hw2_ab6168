@@ -121,11 +121,9 @@ mr_trash_df =
          "glass_bottles" = "glass bottles",
          "plastic_bags" = "plastic bags",
          "sports_balls" = "sports balls",
-         "homes_powered" = "homes powered*"
-  )
-
-
-
+         "homes_powered" = "homes powered*") |> 
+  mutate(sports_balls = round(sports_balls))
+  
 
 
 prof_trash_df = 
