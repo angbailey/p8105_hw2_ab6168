@@ -122,15 +122,32 @@ mr_trash_df =
          "plastic_bags" = "plastic bags",
          "sports_balls" = "sports balls",
          "homes_powered" = "homes powered*") |> 
-  mutate(sports_balls = round(sports_balls))
+  mutate(sports_balls = as.integer(round(sports_balls)))
   
 
 
 prof_trash_df = 
-  read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel")
+  read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel") |>
+    rename_with(tolower) |>
+  rename("weight" = "weight (tons)",
+         "volume" = "volume (cubic yards)",
+         "plastic_bottles" = "plastic bottles",
+         "cig_butts" = "cigarette butts",
+         "glass_bottles" = "glass bottles",
+         "plastic_bags" = "plastic bags",
+         "homes_powered" = "homes powered*")
 
 gwyn_trash_df =
-  read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel")
+  read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel") |> 
+  rename_with(tolower) |> 
+  rename("weight" = "weight (tons)",
+         "volume" = "volume (cubic yards)",
+         "plastic_bottles" = "plastic bottles",
+         "cig_butts" = "cigarette butts",
+         "plastic_bags" = "plastic bags",
+         "homes_powered" = "homes powered*")
+
+  
 
 ```
 
