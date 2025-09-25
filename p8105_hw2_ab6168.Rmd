@@ -108,10 +108,25 @@ The `pols_month` dataset shows the number of national politicians who are democr
 
 ##Problem 2
 
+
 ```{r}
 mr_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Mr. Trash Wheel") |> 
-  select(-...15,-...16)
+  select(-...15,-...16) |> 
+  rename_with(tolower) |> 
+  rename("weight" = "weight (tons)",
+         "volume" = "volume (cubic yards)",
+         "plastic_bottles" = "plastic bottles",
+         "cig_butts" = "cigarette butts",
+         "glass_bottles" = "glass bottles",
+         "plastic_bags" = "plastic bags",
+         "sports_balls" = "sports balls",
+         "homes_powered" = "homes powered*"
+  )
+
+
+
+
 
 prof_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel")
