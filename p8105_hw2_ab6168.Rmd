@@ -113,41 +113,19 @@ The `pols_month` dataset shows the number of national politicians who are democr
 mr_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Mr. Trash Wheel") |> 
   select(-...15,-...16) |> 
-  rename_with(tolower) |> 
-  rename("weight" = "weight (tons)",
-         "volume" = "volume (cubic yards)",
-         "plastic_bottles" = "plastic bottles",
-         "cig_butts" = "cigarette butts",
-         "glass_bottles" = "glass bottles",
-         "plastic_bags" = "plastic bags",
-         "sports_balls" = "sports balls",
-         "homes_powered" = "homes powered*") |> 
-  mutate(sports_balls = as.integer(round(sports_balls)))
+  janitor::clean_names() |> 
+  mutate(sports_balls = as.integer(round(sports_balls)),
+         wheel_name = "mr_trash")
   
-
-
 prof_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel") |>
-    rename_with(tolower) |>
-  rename("weight" = "weight (tons)",
-         "volume" = "volume (cubic yards)",
-         "plastic_bottles" = "plastic bottles",
-         "cig_butts" = "cigarette butts",
-         "glass_bottles" = "glass bottles",
-         "plastic_bags" = "plastic bags",
-         "homes_powered" = "homes powered*")
+  janitor::clean_names() |> 
+  mutate(wheel_name = "professor_trash")
 
 gwyn_trash_df =
   read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel") |> 
-  rename_with(tolower) |> 
-  rename("weight" = "weight (tons)",
-         "volume" = "volume (cubic yards)",
-         "plastic_bottles" = "plastic bottles",
-         "cig_butts" = "cigarette butts",
-         "plastic_bags" = "plastic bags",
-         "homes_powered" = "homes powered*")
-
-  
+  janitor::clean_names() |> 
+  mutate(wheel_name = "gywnnda_trash")
 
 ```
 
