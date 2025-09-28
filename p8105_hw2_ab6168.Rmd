@@ -12,12 +12,15 @@ library(readxl)
 
 
 ## Problem 1
+
+Cleaning pols_month dataframe
 ```{r}
-#cleaning pols_month dataframe
 pols_month_df = 
   read_csv("data/pols-month.csv") |> 
+  #breaking up date variable
   separate(mon,
     into = c("year", "month","day"), sep = "-") |> 
+  #converting month name to number
   mutate(year = as.numeric(year),
     month = case_match(
       month,
@@ -33,6 +36,7 @@ pols_month_df =
       "10" ~ "oct",
       "11" ~ "nov",
       "12" ~ "dec"),
+    #creating new variable to take on dem (0) and gop (1).
     prez_gop = case_match(
       prez_gop,
       0 ~ "dem",
@@ -48,6 +52,7 @@ snp_df =
   read_csv("data/snp.csv") |> 
   separate(date,
     into = c("month", "day","year"), sep = "/") |> 
+  #reformatting year
   mutate(year = as.numeric(year),
          year = case_when(
            year > 15 ~ year + 1900,
@@ -73,10 +78,10 @@ snp_df =
 
 
 
-
 #cleaning unemployment dataframe
 unemployment_df = 
   read_csv("data/unemployment.csv") |> 
+  #switching from wide to long format
   pivot_longer(
     cols = Jan:Dec,
     names_to = "month",
@@ -111,18 +116,23 @@ The `pols_month` dataset shows the number of national politicians who are democr
 
 Reading and tidying excel files
 ```{r}
+#cleaning MrTrash file
 mr_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Mr. Trash Wheel") |> 
+  #removing empty columns
   select(-...15,-...16) |> 
   janitor::clean_names() |> 
   rename(
     weight = "weight_tons",
     volume = "volume_cubic_yards") |> 
-  filter(row_number() <= n() - 2) |>   
+  filter(row_number() <= n() - 2) |>
   mutate(sports_balls = as.integer(round(sports_balls)),
          year = as.integer(year),
          wheel_name = "mr_trash")
-  
+
+
+
+#cleaning ProfessorTrash file  
 prof_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel") |>
   janitor::clean_names() |> 
@@ -132,6 +142,9 @@ prof_trash_df =
   filter(row_number() <= n() - 3) |> 
   mutate(wheel_name = "professor_trash")
 
+
+
+#cleaning GwynndaTrash file
 gwyn_trash_df =
   read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel") |> 
   janitor::clean_names() |> 
@@ -153,7 +166,7 @@ trash_wheel_df =
 
 
 
-June 2022 Gywnnda dataset 
+Filtering Gywnnda dataset to June 2022
 ```{r}
 june2022_gwyn = filter(gwyn_trash_df, month == "June" & year == 2022)
 ```
