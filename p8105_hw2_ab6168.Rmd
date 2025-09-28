@@ -172,9 +172,31 @@ june2022_gwyn = filter(gwyn_trash_df, month == "June" & year == 2022)
 ```
 
 
-
-
 Description
 
 There are `nrow(trash_wheel_df)` observations in the resulting dataset. Among the variables, the total weight of trash collected by Professor Trash Wheel is `sum(prof_trash_df$weight)` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `sum(june2022_gwyn$cigarette_butts)`.
+
+
+
+##Problem 3
+Create a single, well-organized dataset with all the information contained in these data files. To that end: import, clean, tidy, and otherwise wrangle each of these datasets; check for completeness and correctness across datasets (e.g. by viewing individual datasets and monitoring warning messages); merge to create a single, final dataset; and organize this so that variables and observations are in meaningful orders.
+
+
+
+```{r}
+#reading in files
+zip_df = 
+  read_csv("data/Zip Codes.csv")
+
+
+zori_df =
+  read_csv("data/zori_NYC.csv")
+```
+
+
+
+
+
+
+
 
