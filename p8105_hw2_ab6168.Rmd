@@ -211,7 +211,9 @@ Joining datasets
 
 ```{r}
 zori_zip_df =
-  left_join(zip_df, zori_df, by = "zip_code")
+  left_join(zip_df, zori_df, by = "zip_code") |> 
+  select(-county_name,-file_date,-state,-city,-state_fips) |> 
+  relocate(county_code, county_fips, zip_code, neighborhood, .after = county)
   
 ```
 
