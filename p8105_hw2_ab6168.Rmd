@@ -92,6 +92,7 @@ unemployment_df =
   select(-Year) |> 
   relocate(year)
 
+
 ```
 
 
@@ -114,7 +115,7 @@ The `pols_month` dataset shows the number of national politicians who are democr
 
 ## Problem 2
 
-Reading and tidying excel files
+Reading and cleaning excel files
 ```{r}
 #cleaning MrTrash file
 mr_trash_df = 
@@ -184,16 +185,35 @@ Create a single, well-organized dataset with all the information contained in th
 
 
 ```{r}
-#reading in files
+#reading in csv files
 zip_df = 
-  read_csv("data/Zip Codes.csv")
-
+  read_csv("data/Zip Codes.csv") |> 
+  janitor::clean_names()
 
 zori_df =
-  read_csv("data/zori_NYC.csv")
+  read_csv("data/zori_NYC.csv") |> 
+  select(-StateName,-Metro,-RegionType) |> 
+  #renaming variables
+  rename(
+    region_id = "RegionID",
+    size_rank = "SizeRank",
+    zip_code = "RegionName",
+    state = "State",
+    city = "City",
+    county_name = "CountyName"
+  )
+
 ```
 
 
+
+Joining datasets
+
+```{r}
+zori_zip_df =
+  left_join(zip_df, zori_df, by = "zip_code")
+  
+```
 
 
 
