@@ -1,5 +1,6 @@
 ---
 title: "p8105_hw2_ab6168"
+author: Angelica Bailey
 output: github_document
 date: "2025-09-24"
 ---
@@ -10,7 +11,7 @@ library(readxl)
 ```
 
 
-##Problem 1
+## Problem 1
 ```{r}
 #cleaning pols_month dataframe
 pols_month_df = 
@@ -106,7 +107,7 @@ Description
 The `pols_month` dataset shows the number of national politicians who are democratic or republican at any given time. It contains the number of republican governors, senators, and representatives on the associated date as well as on the democratic side. The `snp` dataset shows the closing values of the Standard & Poor's stock market index on the associated date. Lastly, the `unemployment` dataset displays percentages of unemployment by month and year. After joining these datasets, the resulting dataset has 113,124 rows and 13 columns. The total range of years is from 1947 to 2015. The key variables of the dataset include `president`,`close`, `per_unmep`.
 
 
-##Problem 2
+## Problem 2
 
 Reading and tidying excel files
 ```{r}
@@ -138,7 +139,7 @@ gwyn_trash_df =
     weight = "weight_tons",
     volume = "volume_cubic_yards") |> 
   filter(row_number() <= n() - 1) |> 
-  mutate(wheel_name = "gywnnda_trash")
+  mutate(wheel_name = "gwynnda_trash")
 
 ```
 
@@ -152,6 +153,15 @@ trash_wheel_df =
 
 
 
- 
+June 2022 Gywnnda dataset 
+```{r}
+june2022_gwyn = filter(gwyn_trash_df, month == "June" & year == 2022)
+```
 
+
+
+
+Description
+
+There are `nrow(trash_wheel_df)` observations in the resulting dataset. Among the variables, the total weight of trash collected by Professor Trash Wheel is `sum(prof_trash_df$weight)` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `sum(june2022_gwyn$cigarette_butts)`.
 
