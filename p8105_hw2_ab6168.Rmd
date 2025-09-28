@@ -114,6 +114,9 @@ mr_trash_df =
   read_excel("data/trash-wheel.xlsx", sheet = "Mr. Trash Wheel") |> 
   select(-...15,-...16) |> 
   janitor::clean_names() |> 
+  rename(
+    weight = "weight_tons",
+    volume = "volume_cubic_yards") |> 
   filter(row_number() <= n() - 2) |>   
   mutate(sports_balls = as.integer(round(sports_balls)),
          year = as.integer(year),
@@ -122,12 +125,18 @@ mr_trash_df =
 prof_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel") |>
   janitor::clean_names() |> 
+  rename(
+    weight = "weight_tons",
+    volume = "volume_cubic_yards") |> 
   filter(row_number() <= n() - 3) |> 
   mutate(wheel_name = "professor_trash")
 
 gwyn_trash_df =
   read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel") |> 
   janitor::clean_names() |> 
+  rename(
+    weight = "weight_tons",
+    volume = "volume_cubic_yards") |> 
   filter(row_number() <= n() - 1) |> 
   mutate(wheel_name = "gywnnda_trash")
 
@@ -143,5 +152,6 @@ trash_wheel_df =
 
 
 
+ 
 
 
