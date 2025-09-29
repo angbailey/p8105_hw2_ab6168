@@ -228,12 +228,36 @@ zori_zip_df =
 
 **Description**
 
-From the resulting tidy dataset, there are a total of `r nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods.
-ˆ
+From the resulting tidy dataset, there are a total of `r nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods. There are many missing values in the rental prices dataset. 
+
+Some ZIP codes might not be shown in the Zillow dataset because there may be very few rental properties in the zip code.
+
+Comparing rental prices
+```{r}
+#january 2020 prices
+jan2020 = zori_df |> 
+  filter(date == "2020-01-31") |> 
+  drop_na(rent_prices)
 
 
+#january 2021 prices
+jan2021 = zori_df |> 
+  filter(date == "2021-01-31") |> 
+  drop_na(rent_prices)
+```
 
 
+Creating table
+
+```{r}
+
+```
+
+knitr::kable() 
+
+
+11226
+11226
 
 
 
