@@ -230,7 +230,14 @@ zori_zip_df =
 
 From the resulting tidy dataset, there are a total of `r nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods. There are many missing values in the rental prices dataset. 
 
-Some ZIP codes might not be shown in the Zillow dataset because there may be very few rental properties in those zip codes.
+
+Finding missing zip-codes
+```{r}
+missing_zips <- zip_df |> 
+  anti_join(zori_df, by = "zip_code")
+```
+
+Some ZIP codes might not be shown in the Zillow dataset because there may be very few rental properties in those zip codes. There may not be enough data for Zillow to compute the observed rent index.
 
 Comparing rental prices
 ```{r}
