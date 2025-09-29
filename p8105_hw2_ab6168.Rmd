@@ -42,7 +42,7 @@ pols_month_df =
       0 ~ "dem",
       1 ~ "gop"
     ),
-    president = prez_gop) |> 
+    president = prez_dem) |> 
   select(-day,-prez_gop,-prez_dem)
 
 
@@ -225,8 +225,5 @@ zori_zip_df =
 **Description**
 
 From the resulting tidy dataset, there are a total of `nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods.
-
-
-
-
+ˆ
 
