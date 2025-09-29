@@ -111,7 +111,7 @@ fte_df =
 
 **Description**
 
-The `pols_month` dataset shows the number of national politicians who are democratic or republican at any given time. It contains the number of republican governors, senators, and representatives on the associated date as well as on the democratic side. The `snp` dataset shows the closing values of the Standard & Poor's stock market index on the associated date. Lastly, the `unemployment` dataset displays percentages of unemployment by month and year. After joining these datasets, the resulting dataset has 113,124 rows and 13 columns. The total range of years is from 1947 to 2015. The key variables of the dataset include `president`,`close`, `per_unmep`. 
+The `pols_month_df` dataset shows the number of national politicians who are democratic or republican at any given time. It contains the number of republican governors, senators, and representatives on the associated date as well as on the democratic side. The `snp` dataset shows the closing values of the Standard & Poor's stock market index on the associated date. Lastly, the `unemployment` dataset displays percentages of unemployment by month and year. After joining these datasets, the resulting dataset has 113,124 rows and 13 columns. The total range of years is from 1947 to 2015. The key variables of the dataset include `president`,`close`, `per_unmep`. 
 
 
 ## Problem 2
@@ -176,7 +176,7 @@ june2022_gwyn = filter(gwyn_trash_df, month == "June" & year == 2022)
 
 **Description**
 
-There are `nrow(trash_wheel_df)` observations in the resulting dataset. Among the variables, the total weight of trash collected by Professor Trash Wheel is `sum(prof_trash_df$weight)` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `sum(june2022_gwyn$cigarette_butts)`. 
+There are `r nrow(trash_wheel_df)` observations in the resulting dataset. Among the variables, the total weight of trash collected by Professor Trash Wheel is `r sum(prof_trash_df$weight)` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `r sum(june2022_gwyn$cigarette_butts)`. 
 
 
 
@@ -205,11 +205,14 @@ zori_df =
     zip_code = "RegionName",
     state = "State",
     city = "City",
-    county_name = "CountyName"
+    county_name = "CountyName") |> 
+  pivot_longer(
+    cols = "2015-01-31":"2024-08-31",
+    names_to = "date",
+    values_to = "rent_prices"
   )
 
 ```
-
 
 
 Creating tidy dataset
@@ -225,6 +228,13 @@ zori_zip_df =
 
 **Description**
 
-From the resulting tidy dataset, there are a total of `nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods.
+From the resulting tidy dataset, there are a total of `r nrow(zori_zip_df)` observations. There are 320 unique zip codes and 42 unique neighborhoods.
 ˆ
+
+
+
+
+
+
+
 
