@@ -209,7 +209,7 @@ zori_df =
   pivot_longer(
     cols = "2015-01-31":"2024-08-31",
     names_to = "date",
-    values_to = "rent_prices"
+    values_to = "rent_price"
   )
 
 ```
@@ -236,21 +236,41 @@ Comparing rental prices
 ```{r}
 #filtering to January 2020 and 2021
 jan_data <- zori_zip_df |> 
-  filter(date == c("2020-01-31","2021-01-31"))
+  filter(date == "2020-01-31" | date == "2021-01-31") |> 
+  #removing missing prices
+  drop_na(rent_price) |> 
+  drop_na(neighborhood)
+
+#pivot to wide format
+jan_wide <- jan_data |> 
+  pivot_wider(
+    names_from = date,
+    values_from = rent_price) |> 
+  rename(jan_2020 = "2020-01-31", 
+         jan_2021 = "2021-01-31") |> 
+  drop_na(jan_2020) 
+
+#creating variable showing difference between 2020 and 2021
+jan_wide <- jan_wide |> 
+  mutate(price_change = jan_2021 - jan_2020)
+
+
+#arranging to top 10
+top10 <- jan_wide |> 
+  arrange(price_change) %>%
+  slice(1:10) %>%
+  select(county, neighborhood, zip_code, jan_2020, jan_2021, price_change)
+
 ```
 
 
 Creating table
 
 ```{r}
-
+knitr::kable(top10)
 ```
 
-knitr::kable() 
 
-
-11226
-11226
 
 
 
