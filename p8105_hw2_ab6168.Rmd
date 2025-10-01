@@ -115,6 +115,7 @@ The `pols_month_df` dataset shows the number of national politicians who are dem
 
 \
 \
+
 ## Problem 2
 
 Reading and cleaning excel files
@@ -128,28 +129,28 @@ mr_trash_df =
   rename(
     weight = "weight_tons",
     volume = "volume_cubic_yards") |> 
-  filter(row_number() <= n() - 2) |>
+  filter(row_number() <= n() - 1) |>
   mutate(sports_balls = as.integer(round(sports_balls)),
          year = as.integer(year),
          wheel_name = "mr_trash")
 
 
 
-#cleaning ProfessorTrash file  
+#cleaning ProfessorTrash file
 prof_trash_df = 
   read_excel("data/trash-wheel.xlsx", sheet = "Professor Trash Wheel") |>
   janitor::clean_names() |> 
   rename(
     weight = "weight_tons",
     volume = "volume_cubic_yards") |> 
-  filter(row_number() <= n() - 3) |> 
+  filter(row_number() <= n() - 1) |> 
   mutate(wheel_name = "professor_trash")
 
 
 
 #cleaning GwynndaTrash file
 gwyn_trash_df =
-  read_excel("data/trash-wheel.xlsx", sheet = "Gwynnda Trash Wheel") |> 
+  read_excel("data/trash-wheel.xlsx", sheet = "Gwynns Falls Trash Wheel") |> 
   janitor::clean_names() |> 
   rename(
     weight = "weight_tons",
@@ -171,30 +172,29 @@ trash_wheel_df =
 
 Filtering Gywnnda Dataset To June 2022
 ```{r}
-june2022_gwyn = filter(gwyn_trash_df, month == "June" & year == 2022)
+june2022_gwyn = filter(gwyn_trash_df, month == "June", year == 2022) |> 
+  rename(cigar = "cigarette_butts")
 ```
+
 
 
 **Description**
 
-There are `r nrow(trash_wheel_df)` observations in the resulting dataset. Among the variables, the total weight of trash collected by Professor Trash Wheel is `r sum(prof_trash_df$weight)` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `r sum(june2022_gwyn$cigarette_butts)`. 
+There are `r nrow(trash_wheel_df)` observations in the resulting dataset. The variables include `Among the variables, the total weight of trash collected by Professor Trash Wheel is `r sum(prof_trash_df |> select(weight))` tons. The total number of cigarette butts collected by Gwynnda in June of 2022 is  `r sum(june2022_gwyn |> select(cigar))`. 
+
 
 
 \
 \
-##Problem 3
-Create a single, well-organized dataset with all the information contained in these data files. To that end: import, clean, tidy, and otherwise wrangle each of these datasets; check for completeness and correctness across datasets (e.g. by viewing individual datasets and monitoring warning messages); merge to create a single, final dataset; and organize this so that variables and observations are in meaningful orders.
 
+## Problem 3
 
 
 ```{r}
 #reading in csv files
 zip_df = 
   read_csv("data/Zip Codes.csv") |> 
-  janitor::clean_names() |> 
-  #filtering duplicated rows
-  filter(row_number() != 226) |> 
-  filter(row_number() != 226)
+  janitor::clean_names()
 
 
 zori_df =
@@ -207,13 +207,15 @@ zori_df =
     zip_code = "RegionName",
     state = "State",
     city = "City",
-    county_name = "CountyName") |> 
+    county = "CountyName") |> 
+  mutate(
+    county = str_remove(county," County")
+  ) |>
   pivot_longer(
     cols = "2015-01-31":"2024-08-31",
     names_to = "date",
     values_to = "rent_price"
   )
-
 ```
 
 
@@ -221,10 +223,9 @@ Creating Tidy Dataset
 
 ```{r}
 #joining datasets
-zori_zip_df =
-  left_join(zip_df, zori_df, by = "zip_code") |> 
-  select(-county_name,-file_date,-state,-city,-state_fips) |> 
-  relocate(county_code, county_fips, zip_code, neighborhood, .after = county)
+zori_zip_df = 
+  left_join(zori_df, zip_df, by = c("zip_code", "county")) |> 
+  select(-file_date,-state,-city,-state_fips) 
   
 ```
 
@@ -239,7 +240,8 @@ missing_zips <- zip_df |>
   anti_join(zori_df, by = "zip_code")
 ```
 
-Some ZIP codes might not be shown in the Zillow dataset because there may be very few rental properties in those zip codes. There may not be enough data for Zillow to compute the observed rent index.
+Some ZIP codes might not be shown in the Zillow dataset because there may be very few rental properties in those zip codes. There may not be enough data for Zillow to compute the observed rent index. For example, the 10041 zip code is a portion of the financial district which has mostly financial sites and landmarks. Another area is 10101 which includes businesses and amenities like restaurants and cafes. 
+
 
 Comparing Rental Prices
 ```{r}
@@ -247,8 +249,7 @@ Comparing Rental Prices
 jan_data <- zori_zip_df |> 
   filter(date == "2020-01-31" | date == "2021-01-31") |> 
   #removing missing prices
-  drop_na(rent_price) |> 
-  drop_na(neighborhood)
+  drop_na(rent_price)
 
 #pivot to wide format
 jan_wide <- jan_data |> 
@@ -266,9 +267,13 @@ jan_wide <- jan_wide |>
 
 #arranging to top 10
 top10 <- jan_wide |> 
-  arrange(price_change) %>%
-  slice(1:10) %>%
+  arrange(price_change) |> 
+  slice(1:10) |> 
   select(county, neighborhood, zip_code, jan_2020, jan_2021, price_change)
+
+#fixing missing neighborhood
+top10$neighborhood[top10$zip_code == "10069" & is.na(top10$neighborhood)] <- "Upper West Side"
+
 
 ```
 
@@ -280,7 +285,7 @@ knitr::kable(top10)
 ```
 
 
-
+The top 10 neighborhoods that have the largest drop in price are all located in New York. The neighborhood with the biggest drop was Lower Manhattan (zip code: 10007). Demand for these rented properties may fallen due to Covid-19.
 
 
 
